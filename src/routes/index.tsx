@@ -394,12 +394,11 @@ function Index() {
           <h2 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 18 }}>
             Innovate <span className="serif-i">beyond</span>. Build <span className="serif-i">intelligent</span>.
           </h2>
-          <p className="text-2" style={{ fontSize: ".88rem", lineHeight: 1.75, marginTop: 16, maxWidth: 520, margin: "16px auto 0" }}>
-            Working with hospitals, startups, and enterprises ready to ship the next chapter of their product.
+          <p className="text-2" style={{ fontSize: ".88rem", lineHeight: 1.75, marginTop: 16, maxWidth: 520, margin: "16px auto 32px" }}>
+            Fill in the blanks. We'll take it from there.
           </p>
-          <div style={{ marginTop: 26, display: "flex", gap: 10, justifyContent: "center" }}>
-            <a href="mailto:hello@nexyvo.com" className="btn btn-primary">Start a Project →</a>
-            <a href="#services" className="btn btn-ghost">View Services</a>
+          <div style={{ textAlign: "left" }}>
+            <MadLibsForm />
           </div>
         </div>
       </section>
@@ -407,7 +406,10 @@ function Index() {
       {/* FOOTER */}
       <footer style={{ borderTop: "1px solid var(--cb)", padding: "26px 28px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <div style={{ fontWeight: 700, letterSpacing: "-0.02em" }}>Nexyvo<span style={{ color: "var(--acc2)" }}>.</span></div>
+          <div style={{ fontWeight: 700, letterSpacing: "-0.02em", display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <NLogo size={22} id="n-grad-foot" />
+            <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo Technologies</span></span>
+          </div>
           <div style={{ fontSize: ".7rem", color: "var(--text2)" }}>© 2025 Nexyvo Technologies. All rights reserved.</div>
         </div>
       </footer>
