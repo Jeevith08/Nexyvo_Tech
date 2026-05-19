@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { IntroScreen } from "@/components/IntroScreen";
+import { ParticlesCanvas } from "@/components/ParticlesCanvas";
+import { NLogo } from "@/components/NLogo";
+import { MadLibsForm } from "@/components/MadLibsForm";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -205,9 +209,10 @@ function Index() {
     <main style={{ position: "relative", overflow: "hidden" }}>
       {/* NAV */}
       <nav className="nav">
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="#top" style={{ fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.02em" }}>
-            Nexyvo<span style={{ color: "var(--acc2)" }}>.</span>
+        <div className="enter-nav" style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <a href="#top" style={{ fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.02em", display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <NLogo size={26} id="n-grad-nav" />
+            <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div style={{ display: "flex", gap: 26 }} className="hidden md:flex">
             {["Services", "Care360", "About", "Vision", "Goals"].map((l) => (
@@ -224,7 +229,7 @@ function Index() {
         <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.6, maskImage: "radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%)" }} />
         <Particles />
         <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 40, alignItems: "center" }} className="hero-grid">
-          <div>
+          <div className="enter-hero-text">
             <span className="pill"><span className="pill-dot" />Nexyvo Technologies · Est. 2025</span>
             <h1 className="hero-h" style={{ marginTop: 18 }}>
               Innovate Beyond.<br />
@@ -250,7 +255,7 @@ function Index() {
               ))}
             </div>
           </div>
-          <Scene3D />
+          <div className="enter-hero-media"><Scene3D /></div>
         </div>
       </section>
 
