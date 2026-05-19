@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
@@ -58,6 +58,8 @@ const goals = [
 ];
 
 function Particles() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const dots = useMemo(
     () =>
       Array.from({ length: 40 }).map((_, i) => {
@@ -75,6 +77,7 @@ function Particles() {
       }),
     [],
   );
+  if (!ready) return null;
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {dots.map((d) => (
