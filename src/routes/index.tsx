@@ -207,6 +207,8 @@ function DashMock() {
 function Index() {
   return (
     <main style={{ position: "relative", overflow: "hidden" }}>
+      <IntroScreen />
+      <ParticlesCanvas />
       {/* NAV */}
       <nav className="nav">
         <div className="enter-nav" style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
