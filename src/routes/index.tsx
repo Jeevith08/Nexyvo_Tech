@@ -389,6 +389,21 @@ function Index() {
         </div>
       </section>
 
+      {/* CAREERS / INTERNSHIPS */}
+      <section id="careers" style={{ position: "relative", padding: "100px 28px" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 50% at 70% 50%, rgba(94,234,212,0.10), transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <span className="section-tag">Join Nexyvo</span>
+            <h2 className="sec-h" style={{ marginTop: 14 }}>Internship <span className="serif-i">Program.</span></h2>
+            <p className="text-2" style={{ marginTop: 12, fontSize: ".85rem", maxWidth: 560, margin: "12px auto 0" }}>
+              3–4 month internships with a performance-based stipend. Ship real products, mentored by the founder.
+            </p>
+          </div>
+          <InternForm />
+        </div>
+      </section>
+
       {/* FOUNDER */}
       <section id="about" style={{ padding: "60px 28px", maxWidth: 1200, margin: "0 auto" }}>
         <div className="card-base" style={{ padding: 30, display: "flex", gap: 26, alignItems: "center" }}>
