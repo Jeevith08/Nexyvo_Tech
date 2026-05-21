@@ -4,6 +4,7 @@ import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
 import { MadLibsForm } from "@/components/MadLibsForm";
+import { InternForm } from "@/components/InternForm";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -210,7 +211,7 @@ function DashMock() {
 function Index() {
   const [active, setActive] = useState<string>("top");
   useEffect(() => {
-    const ids = ["services", "care360", "about", "vision", "goals", "contact"];
+    const ids = ["services", "care360", "careers", "about", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -244,7 +245,7 @@ function Index() {
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div className="nav-links">
-            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => {
+            {["Services", "Care360", "Careers", "About", "Vision", "Goals"].map((l) => {
               const id = l.toLowerCase();
               return (
                 <a
@@ -385,6 +386,21 @@ function Index() {
               <p className="text-2" style={{ fontSize: ".82rem", lineHeight: 1.75, marginTop: 8 }}>{v.d}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* CAREERS / INTERNSHIPS */}
+      <section id="careers" style={{ position: "relative", padding: "100px 28px" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 50% at 70% 50%, rgba(94,234,212,0.10), transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <span className="section-tag">Join Nexyvo</span>
+            <h2 className="sec-h" style={{ marginTop: 14 }}>Internship <span className="serif-i">Program.</span></h2>
+            <p className="text-2" style={{ marginTop: 12, fontSize: ".85rem", maxWidth: 560, margin: "12px auto 0" }}>
+              3–4 month internships with a performance-based stipend. Ship real products, mentored by the founder.
+            </p>
+          </div>
+          <InternForm />
         </div>
       </section>
 

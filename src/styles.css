@@ -263,3 +263,62 @@ body.intro-done .enter-nav, body.intro-done .enter-hero-text, body.intro-done .e
 
 /* Particle canvas */
 #particles-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+/* === Intern application form === */
+.intern-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+  border: 1px solid var(--cb); border-radius: 18px; padding: 32px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 30px 80px -30px rgba(124,111,255,0.25);
+}
+.intern-card::before {
+  content:""; position:absolute; inset:0; border-radius:18px; padding:1px;
+  background: linear-gradient(135deg, rgba(124,111,255,.4), transparent 40%, rgba(94,234,212,.3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;
+}
+.intern-prog { display:flex; align-items:center; gap:8px; margin-bottom: 22px; }
+.prog-dot { width: 28px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08); transition: .4s; }
+.prog-dot.on { background: linear-gradient(90deg, var(--acc), var(--acc3)); box-shadow: 0 0 10px rgba(124,111,255,.5); }
+.prog-label { margin-left:auto; font-size:.65rem; color: var(--text2); text-transform: uppercase; letter-spacing:.08em; font-weight:600; }
+.intern-h { font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; }
+
+.role-pick { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+.role-tile {
+  display:flex; align-items:flex-start; gap:12px; padding: 14px;
+  background: rgba(255,255,255,0.025); border:1px solid var(--cb); border-radius: 12px;
+  text-align:left; cursor:pointer; color: var(--text); transition: .25s;
+}
+.role-tile:hover { border-color: rgba(124,111,255,.4); transform: translateY(-2px); }
+.role-tile.sel {
+  border-color: rgba(124,111,255,.7);
+  background: linear-gradient(135deg, rgba(124,111,255,.12), rgba(94,234,212,.06));
+  box-shadow: 0 0 0 1px rgba(124,111,255,.3), 0 12px 30px -10px rgba(124,111,255,.35);
+}
+
+.intern-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field label { font-size:.65rem; text-transform:uppercase; letter-spacing:.08em; color: var(--text2); font-weight:600; }
+.fld {
+  background: rgba(255,255,255,0.04); border:1px solid var(--cb); border-radius: 10px;
+  padding: 10px 12px; color: var(--text); font-family: inherit; font-size: .85rem; outline:none;
+  transition: border-color .25s, background .25s;
+}
+.fld:focus { border-color: rgba(124,111,255,.6); background: rgba(124,111,255,.06); }
+textarea.fld { resize: vertical; min-height: 70px; }
+
+.intern-meta {
+  margin-top: 18px; display:flex; gap: 18px; flex-wrap: wrap;
+  padding: 12px 14px; background: rgba(94,234,212,.06); border: 1px dashed rgba(94,234,212,.25);
+  border-radius: 10px; font-size:.72rem; color: var(--text2);
+}
+.intern-meta b { color: var(--acc3); font-weight: 700; }
+
+.intern-actions { display:flex; gap: 10px; margin-top: 22px; align-items:center; }
+
+@media (max-width: 600px) {
+  .intern-card { padding: 22px; border-radius: 14px; }
+  .role-pick, .intern-grid { grid-template-columns: 1fr; }
+  .intern-actions { flex-direction: column-reverse; align-items: stretch; }
+  .intern-actions .btn, .intern-actions .submit-glow { margin-left: 0 !important; width: 100%; }
+}
