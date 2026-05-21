@@ -208,6 +208,30 @@ function DashMock() {
 }
 
 function Index() {
+  const [active, setActive] = useState<string>("top");
+  useEffect(() => {
+    const ids = ["services", "care360", "about", "vision", "goals", "contact"];
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <main style={{ position: "relative", overflow: "hidden" }}>
       <IntroScreen />
@@ -219,12 +243,22 @@ function Index() {
             <NLogo size={26} id="n-grad-nav" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
-          <div style={{ display: "flex", gap: 26 }} className="hidden md:flex">
-            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => (
-              <a key={l} href={`#${l.toLowerCase()}`} className="nav-link">{l}</a>
-            ))}
+          <div className="nav-links">
+            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => {
+              const id = l.toLowerCase();
+              return (
+                <a
+                  key={l}
+                  href={`#${id}`}
+                  onClick={(e) => handleNav(e, id)}
+                  className={`nav-link ${active === id ? "is-active" : ""}`}
+                >
+                  {l}
+                </a>
+              );
+            })}
           </div>
-          <a href="#contact" className="btn btn-primary">Get in Touch →</a>
+          <a href="#contact" onClick={(e) => handleNav(e, "contact")} className="btn btn-primary nav-cta">Get in Touch →</a>
         </div>
       </nav>
 
