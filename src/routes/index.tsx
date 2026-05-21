@@ -452,14 +452,35 @@ function Index() {
       </footer>
 
       <style>{`
+        html { scroll-behavior: smooth; }
+        .nav-links { display: flex; gap: 26px; align-items: center; }
+        .nav-link { position: relative; padding: 6px 2px; }
+        .nav-link.is-active { color: var(--text); }
+        .nav-link.is-active::after {
+          content: ""; position: absolute; left: 0; right: 0; bottom: -4px;
+          height: 2px; border-radius: 2px;
+          background: linear-gradient(90deg, var(--acc), var(--acc3));
+          box-shadow: 0 0 12px rgba(124,111,255,0.6);
+        }
         @media (max-width: 900px) {
           .hero-grid, .care-grid, .vm-grid { grid-template-columns: 1fr !important; }
           .svc-grid, .role-grid, .goal-grid { grid-template-columns: 1fr 1fr !important; }
-          .scene { height: 420px; }
+          .scene { height: 360px; transform: scale(0.85); transform-origin: center; }
+          h2.sec-h { font-size: 1.7rem; }
         }
         @media (max-width: 560px) {
           .svc-grid, .role-grid, .goal-grid { grid-template-columns: 1fr !important; }
+          .nav-links { display: none; }
+          .nav-cta { padding: .55rem .85rem; font-size: .68rem; }
+          .scene { height: 300px; transform: scale(0.7); }
+          section { padding-left: 18px !important; padding-right: 18px !important; }
+          .madlibs { padding: 22px !important; font-size: .95rem !important; line-height: 1.9 !important; }
+          .ml-input, .ml-select { min-width: 120px; font-size: .95rem !important; }
+          .btn { padding: .6rem .9rem; font-size: .7rem; }
+          .card-base { padding: 18px !important; }
         }
+        .ml-step { animation: stepIn .35s ease forwards; }
+        @keyframes stepIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
       `}</style>
     </main>
   );
