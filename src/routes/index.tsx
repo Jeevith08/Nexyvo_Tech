@@ -4,6 +4,7 @@ import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
 import { MadLibsForm } from "@/components/MadLibsForm";
+import { InternForm } from "@/components/InternForm";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -210,7 +211,7 @@ function DashMock() {
 function Index() {
   const [active, setActive] = useState<string>("top");
   useEffect(() => {
-    const ids = ["services", "care360", "about", "vision", "goals", "contact"];
+    const ids = ["services", "care360", "careers", "about", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -244,7 +245,7 @@ function Index() {
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div className="nav-links">
-            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => {
+            {["Services", "Care360", "Careers", "About", "Vision", "Goals"].map((l) => {
               const id = l.toLowerCase();
               return (
                 <a
