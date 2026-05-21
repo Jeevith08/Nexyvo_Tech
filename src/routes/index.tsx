@@ -208,6 +208,30 @@ function DashMock() {
 }
 
 function Index() {
+  const [active, setActive] = useState<string>("top");
+  useEffect(() => {
+    const ids = ["services", "care360", "about", "vision", "goals", "contact"];
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <main style={{ position: "relative", overflow: "hidden" }}>
       <IntroScreen />
@@ -219,12 +243,22 @@ function Index() {
             <NLogo size={26} id="n-grad-nav" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
-          <div style={{ display: "flex", gap: 26 }} className="hidden md:flex">
-            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => (
-              <a key={l} href={`#${l.toLowerCase()}`} className="nav-link">{l}</a>
-            ))}
+          <div className="nav-links">
+            {["Services", "Care360", "About", "Vision", "Goals"].map((l) => {
+              const id = l.toLowerCase();
+              return (
+                <a
+                  key={l}
+                  href={`#${id}`}
+                  onClick={(e) => handleNav(e, id)}
+                  className={`nav-link ${active === id ? "is-active" : ""}`}
+                >
+                  {l}
+                </a>
+              );
+            })}
           </div>
-          <a href="#contact" className="btn btn-primary">Get in Touch →</a>
+          <a href="#contact" onClick={(e) => handleNav(e, "contact")} className="btn btn-primary nav-cta">Get in Touch →</a>
         </div>
       </nav>
 
@@ -418,14 +452,35 @@ function Index() {
       </footer>
 
       <style>{`
+        html { scroll-behavior: smooth; }
+        .nav-links { display: flex; gap: 26px; align-items: center; }
+        .nav-link { position: relative; padding: 6px 2px; }
+        .nav-link.is-active { color: var(--text); }
+        .nav-link.is-active::after {
+          content: ""; position: absolute; left: 0; right: 0; bottom: -4px;
+          height: 2px; border-radius: 2px;
+          background: linear-gradient(90deg, var(--acc), var(--acc3));
+          box-shadow: 0 0 12px rgba(124,111,255,0.6);
+        }
         @media (max-width: 900px) {
           .hero-grid, .care-grid, .vm-grid { grid-template-columns: 1fr !important; }
           .svc-grid, .role-grid, .goal-grid { grid-template-columns: 1fr 1fr !important; }
-          .scene { height: 420px; }
+          .scene { height: 360px; transform: scale(0.85); transform-origin: center; }
+          h2.sec-h { font-size: 1.7rem; }
         }
         @media (max-width: 560px) {
           .svc-grid, .role-grid, .goal-grid { grid-template-columns: 1fr !important; }
+          .nav-links { display: none; }
+          .nav-cta { padding: .55rem .85rem; font-size: .68rem; }
+          .scene { height: 300px; transform: scale(0.7); }
+          section { padding-left: 18px !important; padding-right: 18px !important; }
+          .madlibs { padding: 22px !important; font-size: .95rem !important; line-height: 1.9 !important; }
+          .ml-input, .ml-select { min-width: 120px; font-size: .95rem !important; }
+          .btn { padding: .6rem .9rem; font-size: .7rem; }
+          .card-base { padding: 18px !important; }
         }
+        .ml-step { animation: stepIn .35s ease forwards; }
+        @keyframes stepIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
       `}</style>
     </main>
   );
