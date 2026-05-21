@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const RECIPIENT = "nexyvoofficial@gmail.com";
 
@@ -17,10 +17,10 @@ export function MadLibsForm() {
   const collabOk = emailOk && !!collab;
 
   // cascade: clear later fields when earlier becomes invalid
-  if (!nameOk && building) setBuilding("");
-  if (!buildingOk && industry) setIndustry("");
-  if (!industryOk && email) setEmail("");
-  if (!emailOk && collab) setCollab("");
+  useEffect(() => { if (!nameOk && building) setBuilding(""); }, [nameOk, building]);
+  useEffect(() => { if (!buildingOk && industry) setIndustry(""); }, [buildingOk, industry]);
+  useEffect(() => { if (!industryOk && email) setEmail(""); }, [industryOk, email]);
+  useEffect(() => { if (!emailOk && collab) setCollab(""); }, [emailOk, collab]);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
