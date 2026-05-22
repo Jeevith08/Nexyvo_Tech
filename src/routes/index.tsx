@@ -4,7 +4,7 @@ import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
 import { MadLibsForm } from "@/components/MadLibsForm";
-import { InternForm } from "@/components/InternForm";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -153,7 +153,7 @@ function Scene3D() {
 function Index() {
   const [active, setActive] = useState<string>("top");
   useEffect(() => {
-    const ids = ["services", "careers", "about", "vision", "goals", "contact"];
+    const ids = ["services", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -187,7 +187,7 @@ function Index() {
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div className="nav-links">
-            {["Services", "Careers", "About", "Vision", "Goals"].map((l) => {
+            {["Services", "Vision", "Goals"].map((l) => {
               const id = l.toLowerCase();
               return (
                 <a
@@ -200,6 +200,7 @@ function Index() {
                 </a>
               );
             })}
+            <Link to="/careers" className="nav-link">Careers</Link>
           </div>
           <a href="#contact" onClick={(e) => handleNav(e, "contact")} className="btn btn-primary nav-cta">Get in Touch →</a>
         </div>
@@ -222,7 +223,7 @@ function Index() {
             </p>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
               <a href="#services" className="btn btn-primary">Our Services →</a>
-              <a href="#careers" className="btn btn-ghost">Join the Team</a>
+              <Link to="/careers" className="btn btn-ghost">Join the Team</Link>
             </div>
             <div style={{ display: "flex", gap: 32, marginTop: 36 }}>
               {[
