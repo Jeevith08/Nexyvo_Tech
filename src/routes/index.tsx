@@ -4,7 +4,7 @@ import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
 import { MadLibsForm } from "@/components/MadLibsForm";
-import { InternForm } from "@/components/InternForm";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -153,7 +153,7 @@ function Scene3D() {
 function Index() {
   const [active, setActive] = useState<string>("top");
   useEffect(() => {
-    const ids = ["services", "careers", "about", "vision", "goals", "contact"];
+    const ids = ["services", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -187,7 +187,7 @@ function Index() {
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div className="nav-links">
-            {["Services", "Careers", "About", "Vision", "Goals"].map((l) => {
+            {["Services", "Vision", "Goals"].map((l) => {
               const id = l.toLowerCase();
               return (
                 <a
@@ -200,6 +200,7 @@ function Index() {
                 </a>
               );
             })}
+            <Link to="/careers" className="nav-link">Careers</Link>
           </div>
           <a href="#contact" onClick={(e) => handleNav(e, "contact")} className="btn btn-primary nav-cta">Get in Touch →</a>
         </div>
@@ -222,7 +223,7 @@ function Index() {
             </p>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
               <a href="#services" className="btn btn-primary">Our Services →</a>
-              <a href="#careers" className="btn btn-ghost">Join the Team</a>
+              <Link to="/careers" className="btn btn-ghost">Join the Team</Link>
             </div>
             <div style={{ display: "flex", gap: 32, marginTop: 36 }}>
               {[
@@ -286,37 +287,6 @@ function Index() {
               <p className="text-2" style={{ fontSize: ".82rem", lineHeight: 1.75, marginTop: 8 }}>{v.d}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* CAREERS / INTERNSHIPS */}
-      <section id="careers" style={{ position: "relative", padding: "100px 28px" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 50% at 70% 50%, rgba(94,234,212,0.10), transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="section-tag">Join Nexyvo</span>
-            <h2 className="sec-h" style={{ marginTop: 14 }}>Internship <span className="serif-i">Program.</span></h2>
-            <p className="text-2" style={{ marginTop: 12, fontSize: ".85rem", maxWidth: 560, margin: "12px auto 0" }}>
-              3–4 month internships with a performance-based stipend. Ship real products, mentored by the founder.
-            </p>
-          </div>
-          <InternForm />
-        </div>
-      </section>
-
-      {/* FOUNDER */}
-      <section id="about" style={{ padding: "60px 28px", maxWidth: 1200, margin: "0 auto" }}>
-        <div className="card-base" style={{ padding: 30, display: "flex", gap: 26, alignItems: "center" }}>
-          <div className="ring"><div className="ring-inner">J</div></div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, letterSpacing: "-0.02em" }}>Jeevith</h3>
-              <span className="pill" style={{ color: "var(--acc2)", borderColor: "rgba(124,111,255,0.3)", background: "rgba(124,111,255,0.08)" }}>Founder & Full Stack Developer</span>
-            </div>
-            <p className="text-2" style={{ fontSize: ".82rem", lineHeight: 1.75, marginTop: 10, maxWidth: 720 }}>
-              Building Nexyvo with a single belief — that thoughtful engineering and AI can quietly transform entire industries. From healthcare to enterprise SaaS, every product ships with craft, calm, and purpose.
-            </p>
-          </div>
         </div>
       </section>
 
