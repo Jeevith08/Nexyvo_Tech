@@ -290,37 +290,6 @@ function Index() {
         </div>
       </section>
 
-      {/* CAREERS / INTERNSHIPS */}
-      <section id="careers" style={{ position: "relative", padding: "100px 28px" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 50% at 70% 50%, rgba(94,234,212,0.10), transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <span className="section-tag">Join Nexyvo</span>
-            <h2 className="sec-h" style={{ marginTop: 14 }}>Internship <span className="serif-i">Program.</span></h2>
-            <p className="text-2" style={{ marginTop: 12, fontSize: ".85rem", maxWidth: 560, margin: "12px auto 0" }}>
-              3–4 month internships with a performance-based stipend. Ship real products, mentored by the founder.
-            </p>
-          </div>
-          <InternForm />
-        </div>
-      </section>
-
-      {/* FOUNDER */}
-      <section id="about" style={{ padding: "60px 28px", maxWidth: 1200, margin: "0 auto" }}>
-        <div className="card-base" style={{ padding: 30, display: "flex", gap: 26, alignItems: "center" }}>
-          <div className="ring"><div className="ring-inner">J</div></div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <h3 style={{ fontSize: "1.1rem", fontWeight: 700, letterSpacing: "-0.02em" }}>Jeevith</h3>
-              <span className="pill" style={{ color: "var(--acc2)", borderColor: "rgba(124,111,255,0.3)", background: "rgba(124,111,255,0.08)" }}>Founder & Full Stack Developer</span>
-            </div>
-            <p className="text-2" style={{ fontSize: ".82rem", lineHeight: 1.75, marginTop: 10, maxWidth: 720 }}>
-              Building Nexyvo with a single belief — that thoughtful engineering and AI can quietly transform entire industries. From healthcare to enterprise SaaS, every product ships with craft, calm, and purpose.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* GOALS */}
       <section id="goals" style={{ padding: "80px 28px", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
