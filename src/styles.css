@@ -234,10 +234,10 @@ body.intro-done .enter-nav, body.intro-done .enter-hero-text, body.intro-done .e
 /* Mad libs form */
 .madlibs {
   background: rgba(255,255,255,0.03); border: 1px solid var(--cb);
-  border-radius: 18px; padding: 34px; font-size: 1.05rem; line-height: 2.1;
+  border-radius: 18px; padding: 44px 48px; font-size: 1.05rem; line-height: 2.4;
   position: relative;
 }
-.madlibs-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.madlibs-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; margin-bottom: 6px; }
 .tw { display: inline-block; overflow: hidden; white-space: nowrap; opacity: 0; }
 .tw.in { animation: twType .8s steps(28,end) forwards, twFade .3s ease forwards; }
 @keyframes twType { from { max-width: 0; } to { max-width: 600px; } }
@@ -245,7 +245,7 @@ body.intro-done .enter-nav, body.intro-done .enter-hero-text, body.intro-done .e
 .ml-input, .ml-select {
   background: transparent; border: none; border-bottom: 1.5px dashed rgba(122,0,255,0.5);
   color: #fff; font-family: inherit; font-size: 1.05rem; font-weight: 600;
-  padding: 4px 8px; min-width: 140px; outline: none; transition: border-color .25s;
+  padding: 6px 12px; min-width: 180px; outline: none; transition: border-color .25s;
 }
 .ml-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; font-style: italic; }
 .ml-input:focus, .ml-select:focus { border-bottom-color: #00d2ff; }
@@ -304,8 +304,37 @@ body.intro-done .enter-nav, body.intro-done .enter-hero-text, body.intro-done .e
   padding: 10px 12px; color: var(--text); font-family: inherit; font-size: .85rem; outline:none;
   transition: border-color .25s, background .25s;
 }
+select.fld {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%237c6fff' stroke-width='2' d='M1 1l5 5 5-5'/></svg>");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 34px;
+}
+select.fld option { background:#0d0d1a; color:#fff; padding: 8px; }
+select.fld:focus option:checked { background: linear-gradient(0deg, rgba(124,111,255,.4), rgba(124,111,255,.4)); }
 .fld:focus { border-color: rgba(124,111,255,.6); background: rgba(124,111,255,.06); }
 textarea.fld { resize: vertical; min-height: 70px; }
+
+/* Drag & drop resume zone */
+.dropzone {
+  margin-top: 6px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: 8px; padding: 22px; border-radius: 12px;
+  border: 1.5px dashed rgba(124,111,255,.35); background: rgba(124,111,255,.04);
+  color: var(--text2); text-align:center; cursor:pointer; transition: .25s;
+}
+.dropzone:hover, .dropzone.drag {
+  border-color: rgba(124,111,255,.7); background: rgba(124,111,255,.08); color: var(--text);
+}
+.dropzone .dz-ic { color: var(--acc); }
+.dropzone .dz-t { font-size: .82rem; font-weight: 600; color: var(--text); }
+.dropzone .dz-s { font-size: .7rem; }
+.dropzone.has-file { border-style: solid; border-color: rgba(94,234,212,.5); background: rgba(94,234,212,.06); }
+
+.role-tile .role-ic {
+  width: 38px; height: 38px; border-radius: 10px; display:grid; place-items:center;
+  background: linear-gradient(135deg, rgba(124,111,255,.18), rgba(94,234,212,.12));
+  border: 1px solid rgba(124,111,255,.25); color: var(--acc3); flex-shrink:0;
+}
 
 .intern-meta {
   margin-top: 18px; display:flex; gap: 18px; flex-wrap: wrap;

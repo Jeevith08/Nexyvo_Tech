@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Palette, Smartphone, Layers, MonitorSmartphone, Server, UploadCloud, FileText, X } from "lucide-react";
 
 const ROLES = [
-  { i: "🎨", t: "UI / UX Design", d: "Figma, design systems, prototyping" },
-  { i: "📱", t: "App Development (Flutter)", d: "Cross-platform mobile apps" },
-  { i: "🧩", t: "Full Stack", d: "End-to-end product engineering" },
-  { i: "💻", t: "Frontend", d: "React, TypeScript, modern UI" },
-  { i: "⚙️", t: "Backend", d: "APIs, databases, cloud" },
+  { Ic: Palette, t: "UI / UX Design", d: "Figma, design systems, prototyping" },
+  { Ic: Smartphone, t: "App Development (Flutter)", d: "Cross-platform mobile apps" },
+  { Ic: Layers, t: "Full Stack", d: "End-to-end product engineering" },
+  { Ic: MonitorSmartphone, t: "Frontend", d: "React, TypeScript, modern UI" },
+  { Ic: Server, t: "Backend", d: "APIs, databases, cloud" },
 ];
 
 const ENDPOINT = "https://formsubmit.co/ajax/nexyvoofficial@gmail.com";
@@ -20,6 +21,9 @@ export function InternForm() {
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [drag, setDrag] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -31,26 +35,33 @@ export function InternForm() {
   const send = async () => {
     setSending(true); setErr("");
     try {
-      const res = await fetch(ENDPOINT, {
+      const fd = new FormData();
+      fd.append("_subject", `Nexyvo Internship — ${role} — ${form.name}`);
+      fd.append("Role", role);
+      fd.append("Stipend", "Performance based");
+      fd.append("Duration", "3–4 months");
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      if (resumeFile) fd.append("Resume", resumeFile);
+      const res = await fetch(ENDPOINT.replace("/ajax/", "/"), {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          _subject: `Nexyvo Internship — ${role} — ${form.name}`,
-          Role: role,
-          Stipend: "Performance based",
-          Duration: "3–4 months",
-          ...form,
-        }),
+        body: fd,
       });
       if (!res.ok) throw new Error("Network");
       setDone(true);
     } catch {
       // mailto fallback
       const body = `Role: ${role}\nStipend: Performance based\nDuration: 3-4 months\n\n` +
-        Object.entries(form).map(([k, v]) => `${k}: ${v}`).join("\n");
+        Object.entries(form).map(([k, v]) => `${k}: ${v}`).join("\n") +
+        (resumeFile ? `\nResume file: ${resumeFile.name} (attach manually)` : "");
       window.location.href = `mailto:nexyvoofficial@gmail.com?subject=${encodeURIComponent(`Nexyvo Internship — ${role} — ${form.name}`)}&body=${encodeURIComponent(body)}`;
       setErr("Opening your email app as fallback…");
     } finally { setSending(false); }
+  };
+
+  const onPickFile = (f: File | null) => {
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) { setErr("File must be under 5MB"); return; }
+    setErr(""); setResumeFile(f);
   };
 
   if (done) {
@@ -87,7 +98,7 @@ export function InternForm() {
                 className={`role-tile ${role === r.t ? "sel" : ""}`}
                 onClick={() => setRole(r.t)}
               >
-                <span style={{ fontSize: "1.1rem" }}>{r.i}</span>
+                <span className="role-ic"><r.Ic size={18} strokeWidth={1.75} /></span>
                 <div>
                   <div style={{ fontSize: ".82rem", fontWeight: 600 }}>{r.t}</div>
                   <div className="text-2" style={{ fontSize: ".68rem", marginTop: 2 }}>{r.d}</div>
@@ -133,7 +144,49 @@ export function InternForm() {
           <div className="intern-grid">
             <Field label="Key skills" value={form.skills} onChange={(v) => upd("skills", v)} placeholder="React, Flutter, Figma…" />
             <Field label="Portfolio / GitHub" value={form.portfolio} onChange={(v) => upd("portfolio", v)} placeholder="https://…" />
-            <Field label="Resume link (Drive / Notion)" value={form.resume} onChange={(v) => upd("resume", v)} placeholder="https://…" />
+            <Field label="Resume link (optional)" value={form.resume} onChange={(v) => upd("resume", v)} placeholder="Drive / Notion URL" />
+            <div className="field">
+              <label>Upload resume (PDF / DOC)</label>
+              <div
+                className={`dropzone ${drag ? "drag" : ""} ${resumeFile ? "has-file" : ""}`}
+                onClick={() => fileRef.current?.click()}
+                onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+                onDragLeave={() => setDrag(false)}
+                onDrop={(e) => {
+                  e.preventDefault(); setDrag(false);
+                  onPickFile(e.dataTransfer.files?.[0] ?? null);
+                }}
+              >
+                {resumeFile ? (
+                  <>
+                    <FileText className="dz-ic" size={22} />
+                    <div className="dz-t">{resumeFile.name}</div>
+                    <div className="dz-s">{(resumeFile.size / 1024).toFixed(0)} KB · click to replace</div>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setResumeFile(null); }}
+                      style={{ position: "absolute", marginTop: -8, marginLeft: 180, background: "transparent", border: "none", color: "var(--text2)", cursor: "pointer" }}
+                      aria-label="Remove"
+                    >
+                      <X size={14} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <UploadCloud className="dz-ic" size={24} />
+                    <div className="dz-t">Drag &amp; drop or click to upload</div>
+                    <div className="dz-s">PDF, DOC, DOCX · max 5MB</div>
+                  </>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/pdf"
+                  hidden
+                  onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
+                />
+              </div>
+            </div>
             <div className="field" style={{ gridColumn: "1 / -1" }}>
               <label>Why Nexyvo?</label>
               <textarea className="fld" rows={3} value={form.why} onChange={(e) => upd("why", e.target.value)} placeholder="A line or two about you." />
