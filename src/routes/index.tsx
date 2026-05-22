@@ -30,25 +30,6 @@ const services = [
   { i: "🔗", t: "API & Automation", d: "Integrations and AI automations that remove busywork.", c: "#b8a9ff" },
 ];
 
-const care360 = [
-  "AI Patient Timeline",
-  "OCR Report Reading",
-  "Voice-Based Doctor Consultation",
-  "AI Patient Summary",
-  "Role-Based Dashboard System",
-  "Queue & Token Management",
-  "Digital Prescriptions",
-  "Pregnancy Risk Alerts",
-  "Unified Medical History System",
-];
-
-const roles = [
-  { i: "🛡️", t: "Admin Dashboard", d: "Full control over operations, staff, and analytics.", c: "#7c6fff" },
-  { i: "🩺", t: "Doctor Panel", d: "Patient queue, voice notes, prescriptions and history.", c: "#5eead4" },
-  { i: "💉", t: "Nurse Panel", d: "Vitals capture, alerts and ward management.", c: "#b8a9ff" },
-  { i: "👤", t: "Patient Portal", d: "Bookings, reports, prescriptions and AI summaries.", c: "#5eead4" },
-];
-
 const goals = [
   { n: "01", t: "AI SaaS Platforms", d: "Launch a suite of focused, AI-native SaaS products." },
   { n: "02", t: "Healthcare Tech Expansion", d: "Bring Care360 to clinics and hospitals globally." },
@@ -169,49 +150,10 @@ function Scene3D() {
   );
 }
 
-function DashMock() {
-  return (
-    <div className="dash">
-      <div className="dash-head">
-        <div>
-          <div className="dash-title">Care360 — Operations</div>
-          <div style={{ fontSize: ".55rem", color: "var(--text2)", textTransform: "uppercase", letterSpacing: ".08em", marginTop: 2 }}>
-            Today · Live
-          </div>
-        </div>
-        <div className="dots"><span className="dot r" /><span className="dot y" /><span className="dot g" /></div>
-      </div>
-      <div className="stat-row">
-        <div className="stat-card"><div className="l">Patients Today</div><div className="v">248</div><div className="d">+12.4%</div></div>
-        <div className="stat-card"><div className="l">Doctors Active</div><div className="v">36</div><div className="d">+3</div></div>
-        <div className="stat-card"><div className="l">Risk Alerts</div><div className="v">7</div><div className="d" style={{ color: "#ff7ab6" }}>2 critical</div></div>
-      </div>
-      <div className="bar-chart">
-        {[45, 70, 55, 90, 65, 80, 95].map((h, i) => (
-          <span key={i} style={{ height: `${h}%` }} />
-        ))}
-      </div>
-      <div className="patient-table">
-        {[
-          { n: "A", name: "Aarav Mehta", s: "In Queue", c: "s-queue", bg: "linear-gradient(135deg,#5eead4,#7c6fff)" },
-          { n: "P", name: "Priya Sharma", s: "Consulting", c: "s-cons", bg: "linear-gradient(135deg,#b8a9ff,#7c6fff)" },
-          { n: "R", name: "Rahul Iyer", s: "Discharged", c: "s-disc", bg: "linear-gradient(135deg,#7c6fff,#5eead4)" },
-        ].map((p) => (
-          <div key={p.n} className="patient-row">
-            <span className="avatar" style={{ background: p.bg }}>{p.n}</span>
-            <span style={{ color: "var(--text)" }}>{p.name}</span>
-            <span className={`status ${p.c}`}>{p.s}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Index() {
   const [active, setActive] = useState<string>("top");
   useEffect(() => {
-    const ids = ["services", "care360", "careers", "about", "vision", "goals", "contact"];
+    const ids = ["services", "careers", "about", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -245,7 +187,7 @@ function Index() {
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </a>
           <div className="nav-links">
-            {["Services", "Care360", "Careers", "About", "Vision", "Goals"].map((l) => {
+            {["Services", "Careers", "About", "Vision", "Goals"].map((l) => {
               const id = l.toLowerCase();
               return (
                 <a
@@ -279,8 +221,8 @@ function Index() {
               We craft AI-driven software, healthcare platforms, and intelligent automation systems for the next decade of digital products.
             </p>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
-              <a href="#care360" className="btn btn-primary">Explore Care360 →</a>
-              <a href="#services" className="btn btn-ghost">Our Services</a>
+              <a href="#services" className="btn btn-primary">Our Services →</a>
+              <a href="#careers" className="btn btn-ghost">Join the Team</a>
             </div>
             <div style={{ display: "flex", gap: 32, marginTop: 36 }}>
               {[
@@ -318,48 +260,6 @@ function Index() {
               <div style={{ width: 38, height: 38, borderRadius: 10, display: "grid", placeItems: "center", background: `${s.c}22`, border: `1px solid ${s.c}44`, fontSize: ".95rem" }}>{s.i}</div>
               <h3 style={{ fontSize: ".95rem", fontWeight: 600, marginTop: 14, letterSpacing: "-0.01em" }}>{s.t}</h3>
               <p className="text-2" style={{ fontSize: ".78rem", lineHeight: 1.7, marginTop: 6 }}>{s.d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CARE360 */}
-      <section id="care360" style={{ position: "relative", padding: "100px 28px" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(60% 50% at 30% 50%, rgba(124,111,255,0.10), transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "center" }} className="care-grid">
-          <div>
-            <span className="section-tag">Flagship Product</span>
-            <h2 className="sec-h" style={{ marginTop: 14 }}>
-              Nexyvo <span className="serif-i">Care360</span>
-            </h2>
-            <p className="text-2" style={{ fontSize: ".88rem", marginTop: 14, lineHeight: 1.75, maxWidth: 480 }}>
-              An AI-powered maternity hospital management ecosystem — unifying patients, doctors, nurses, and admin into one intelligent workflow.
-            </p>
-            <ul style={{ marginTop: 22, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 18px" }}>
-              {care360.map((f) => (
-                <li key={f} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: ".78rem", color: "var(--text)" }}>
-                  <span className="fdot" />{f}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <DashMock />
-        </div>
-      </section>
-
-      {/* ROLES */}
-      <section style={{ padding: "80px 28px", maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <span className="section-tag">Role-Based Access</span>
-          <h2 className="sec-h" style={{ marginTop: 14 }}>One platform. <span className="serif-i">Four perspectives.</span></h2>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }} className="role-grid">
-          {roles.map((r) => (
-            <div key={r.t} className="card-base card-hover" style={{ padding: 22, position: "relative", overflow: "hidden" }}>
-              <div style={{ width: 42, height: 42, borderRadius: "50%", display: "grid", placeItems: "center", background: `${r.c}22`, border: `1px solid ${r.c}55`, fontSize: "1rem" }}>{r.i}</div>
-              <h3 style={{ fontSize: ".92rem", fontWeight: 600, marginTop: 14 }}>{r.t}</h3>
-              <p className="text-2" style={{ fontSize: ".76rem", lineHeight: 1.7, marginTop: 6 }}>{r.d}</p>
-              <div style={{ height: 2, marginTop: 18, borderRadius: 2, background: `linear-gradient(90deg, ${r.c}, transparent)` }} />
             </div>
           ))}
         </div>
@@ -442,7 +342,7 @@ function Index() {
       {/* TAGLINE / CTA */}
       <section id="contact" style={{ padding: "120px 28px 100px", textAlign: "center", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(50% 60% at 50% 50%, rgba(124,111,255,0.18), transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: 820, margin: "0 auto" }}>
+        <div style={{ position: "relative", maxWidth: 980, margin: "0 auto" }}>
           <span className="section-tag">Let&apos;s build</span>
           <h2 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 18 }}>
             Innovate <span className="serif-i">beyond</span>. Build <span className="serif-i">intelligent</span>.
