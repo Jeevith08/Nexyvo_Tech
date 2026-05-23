@@ -6,7 +6,7 @@ import { InternForm } from "@/components/InternForm";
 import {
   ArrowLeft, MapPin, Clock, Wallet, Users, Palette, Smartphone,
   Layers, MonitorSmartphone, Server, Sparkles, Rocket, HeartHandshake,
-  GraduationCap, BadgeCheck, Coffee,
+  GraduationCap, BadgeCheck, Coffee, Menu, X,
 } from "lucide-react";
 
 const OPEN_ROLES = [
@@ -41,6 +41,7 @@ export const Route = createFileRoute("/careers")({
 function CareersPage() {
   const [selectedPosition, setSelectedPosition] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleApply = (positionId: string) => {
     setSelectedPosition(positionId);
@@ -62,27 +63,53 @@ function CareersPage() {
       <ParticlesCanvas />
 
       <nav className="nav">
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link to="/" style={{ fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.02em", display: "inline-flex", alignItems: "center", gap: 10 }}>
             <NLogo size={26} id="n-grad-careers" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
           </Link>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 20 }}>
-            <Link to="/" className="nav-link" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <ArrowLeft size={14} /> Back to home
-            </Link>
-            <a href="#roles" className="btn btn-primary" style={{ fontSize: ".72rem", padding: ".55rem 1rem" }} onClick={(e) => { e.preventDefault(); handleCancel(); }}>Apply now</a>
+          <div className="nav-links">
+            <Link to="/#services" className="nav-link">Services</Link>
+            <Link to="/#vision" className="nav-link">Vision</Link>
+            <Link to="/#goals" className="nav-link">Goals</Link>
+            <Link to="/careers" className="nav-link is-active">Careers</Link>
           </div>
+          <a href="#roles" className="btn btn-primary nav-cta" style={{ fontSize: ".72rem", padding: ".55rem 1rem" }} onClick={(e) => { e.preventDefault(); handleCancel(); }}>Apply now</a>
+
+          {/* Hamburger toggle button visible on mobile */}
+          <button className="menu-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle Navigation Menu">
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </nav>
 
+      {/* Mobile Nav Overlay */}
+      <div className={`mobile-nav ${mobileOpen ? "is-open" : ""}`}>
+        <Link to="/#services" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Services</Link>
+        <Link to="/#vision" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Vision</Link>
+        <Link to="/#goals" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Goals</Link>
+        <Link to="/careers" className="mobile-nav-link is-active" onClick={() => setMobileOpen(false)}>Careers</Link>
+        <a
+          href="#roles"
+          onClick={(e) => {
+            e.preventDefault();
+            setMobileOpen(false);
+            handleCancel();
+          }}
+          className="btn btn-primary"
+          style={{ marginTop: 12 }}
+        >
+          Apply now
+        </a>
+      </div>
+
       {/* Hero */}
       {!showForm && (
-        <section style={{ position: "relative", padding: "120px 28px 60px", maxWidth: 1180, margin: "0 auto" }}>
+        <section style={{ position: "relative", padding: "120px 28px 60px", maxWidth: 1000, margin: "0 auto" }}>
           <div className="radial-glow" />
           <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.4, maskImage: "radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%)" }} />
           <div style={{ position: "relative", maxWidth: 760 }}>
-            <span className="pill"><span className="pill-dot" />Careers · 2025 Internship Program</span>
+            <span className="pill"><span className="pill-dot" />Careers · 2026 Internship Program</span>
             <h1 className="hero-h" style={{ marginTop: 18, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", lineHeight: 1.08 }}>
               Build the <span className="serif-i">next decade</span> of intelligent software.
             </h1>
@@ -105,7 +132,7 @@ function CareersPage() {
 
       {/* Why Nexyvo */}
       {!showForm && (
-        <section style={{ position: "relative", padding: "50px 28px", maxWidth: 1180, margin: "0 auto" }}>
+        <section style={{ position: "relative", padding: "50px 28px", maxWidth: 1000, margin: "0 auto" }}>
           <div style={{ marginBottom: 24 }}>
             <span className="section-tag">Life at Nexyvo</span>
             <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 600, letterSpacing: "-0.02em", marginTop: 12 }}>What you get when you join</h2>
@@ -124,7 +151,7 @@ function CareersPage() {
 
       {/* Open roles */}
       {!showForm && (
-        <section id="roles" style={{ position: "relative", padding: "60px 28px", maxWidth: 1180, margin: "0 auto", scrollMarginTop: 80 }}>
+        <section id="roles" style={{ position: "relative", padding: "60px 28px", maxWidth: 1000, margin: "0 auto", scrollMarginTop: 80 }}>
           <div style={{ marginBottom: 24, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
             <div>
               <span className="section-tag">Open Positions</span>
@@ -157,7 +184,7 @@ function CareersPage() {
 
       {/* Application */}
       {showForm && (
-        <section id="apply" style={{ position: "relative", padding: "60px 28px 100px", maxWidth: 980, margin: "0 auto", scrollMarginTop: 80 }}>
+        <section id="apply" className="apply-section" style={{ position: "relative", maxWidth: 840, margin: "0 auto", scrollMarginTop: 80 }}>
           <div style={{ marginBottom: 24, textAlign: "center" }}>
             <span className="section-tag" style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
               <Sparkles size={11} />
@@ -178,7 +205,7 @@ function CareersPage() {
             <NLogo size={22} id="n-grad-careers-foot" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo Technologies</span></span>
           </div>
-          <div style={{ fontSize: ".7rem", color: "var(--text2)" }}>© 2025 Nexyvo Technologies.</div>
+          <div style={{ fontSize: ".7rem", color: "var(--text2)" }}>© 2026 Nexyvo Technologies.</div>
         </div>
       </footer>
     </main>

@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { IntroScreen } from "@/components/IntroScreen";
 import { ParticlesCanvas } from "@/components/ParticlesCanvas";
 import { NLogo } from "@/components/NLogo";
 import { MadLibsForm } from "@/components/MadLibsForm";
 import { Link } from "@tanstack/react-router";
+import { Menu, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -19,15 +20,159 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { i: "🌐", t: "Web Development", d: "Modern, performant web platforms built with the latest frameworks.", c: "#7c6fff" },
-  { i: "📱", t: "Mobile App Development", d: "Native-feeling iOS & Android apps with a single codebase.", c: "#5eead4" },
-  { i: "🧠", t: "AI Applications", d: "Production-grade AI features tailored to real business problems.", c: "#b8a9ff" },
-  { i: "⚙️", t: "Custom Software", d: "Bespoke systems engineered around your workflows.", c: "#7c6fff" },
-  { i: "📊", t: "Dashboard Systems", d: "Live data visualization & analytics dashboards.", c: "#5eead4" },
-  { i: "🏥", t: "Healthcare Tech", d: "HIPAA-aware platforms for clinics and hospitals.", c: "#b8a9ff" },
-  { i: "☁️", t: "Cloud Platforms", d: "Scalable cloud-native architectures, serverless first.", c: "#7c6fff" },
-  { i: "🎨", t: "UI/UX Design", d: "Refined interfaces that feel premium and intuitive.", c: "#5eead4" },
-  { i: "🔗", t: "API & Automation", d: "Integrations and AI automations that remove busywork.", c: "#b8a9ff" },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    ),
+    t: "Web Development",
+    d: "Modern, performant web platforms built with the latest frameworks.",
+    c: "#7c6fff",
+    wide: true,
+    dur: 5,
+    delay: 0,
+    tiltX: 1.5,
+    tiltY: -1.5,
+    z: 15,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+        <line x1="12" y1="18" x2="12" y2="18.01"/>
+      </svg>
+    ),
+    t: "Mobile App Development",
+    d: "Native-feeling iOS & Android apps with a single codebase.",
+    c: "#5eead4",
+    wide: false,
+    dur: 6,
+    delay: 0.5,
+    tiltX: -1.8,
+    tiltY: 2,
+    z: 10,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.06 2.5 2.5 0 0 1 0-3 2.5 2.5 0 0 1 0-3.06A2.5 2.5 0 0 1 9.5 2z"/>
+        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.06 2.5 2.5 0 0 0 0-3 2.5 2.5 0 0 0 0-3.06A2.5 2.5 0 0 0 14.5 2z"/>
+      </svg>
+    ),
+    t: "AI Applications",
+    d: "Production-grade AI features tailored to real business problems.",
+    c: "#b8a9ff",
+    wide: false,
+    dur: 7,
+    delay: 1,
+    tiltX: 2.2,
+    tiltY: -1,
+    z: 8,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    ),
+    t: "Custom Software",
+    d: "Bespoke systems engineered around your workflows.",
+    c: "#7c6fff",
+    wide: true,
+    dur: 5.5,
+    delay: 1.5,
+    tiltX: -1.2,
+    tiltY: -2.5,
+    z: 20,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+        <polyline points="17 6 23 6 23 12"/>
+      </svg>
+    ),
+    t: "Dashboard Systems",
+    d: "Live data visualization & analytics dashboards.",
+    c: "#5eead4",
+    wide: false,
+    dur: 6.5,
+    delay: 0.3,
+    tiltX: 1,
+    tiltY: 1.8,
+    z: 12,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+    ),
+    t: "Healthcare Tech",
+    d: "HIPAA-aware platforms for clinics and hospitals.",
+    c: "#b8a9ff",
+    wide: false,
+    dur: 5.2,
+    delay: 0.8,
+    tiltX: -2.5,
+    tiltY: -1.2,
+    z: 14,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 13v8M12 13l-4 4M12 13l4-4"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+    ),
+    t: "Cloud Platforms",
+    d: "Scalable cloud-native architectures, serverless first.",
+    c: "#7c6fff",
+    wide: false,
+    dur: 4.8,
+    delay: 1.3,
+    tiltX: 1.8,
+    tiltY: -2.2,
+    z: 18,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m12 22 1-1c1.4-1.4 2.4-3.2 3-5.2L18 9l-9 2-6.8 3c-2 1-3.8 2-5.2 3l-1 1"/>
+        <path d="m18 9 3-3-3-3-3 3 3 3z"/>
+      </svg>
+    ),
+    t: "UI/UX Design",
+    d: "Refined interfaces that feel premium and intuitive.",
+    c: "#5eead4",
+    wide: true,
+    dur: 5.8,
+    delay: 0.6,
+    tiltX: -1.5,
+    tiltY: 1.5,
+    z: 16,
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+    ),
+    t: "API & Automation",
+    d: "Integrations and AI automations that remove busywork.",
+    c: "#b8a9ff",
+    wide: false,
+    dur: 6.2,
+    delay: 1.1,
+    tiltX: 2.5,
+    tiltY: 2,
+    z: 11,
+  },
 ];
 
 const goals = [
@@ -150,8 +295,47 @@ function Scene3D() {
   );
 }
 
+function ServiceNumber({ target }: { target: number }) {
+  const [num, setNum] = useState(1);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let start = 1;
+          const end = target;
+          if (start === end) {
+            setNum(end);
+            return;
+          }
+          const duration = 800; // ms
+          const stepTime = Math.abs(Math.floor(duration / end));
+          const timer = setInterval(() => {
+            start += 1;
+            setNum(start);
+            if (start >= end) {
+              clearInterval(timer);
+            }
+          }, stepTime);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+    return () => observer.disconnect();
+  }, [target]);
+
+  return <span ref={ref}>0{num}</span>;
+}
+
 function Index() {
   const [active, setActive] = useState<string>("top");
+  const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     const ids = ["services", "vision", "goals", "contact"];
     const obs = new IntersectionObserver(
@@ -181,7 +365,7 @@ function Index() {
       <ParticlesCanvas />
       {/* NAV */}
       <nav className="nav">
-        <div className="enter-nav" style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="enter-nav" style={{ maxWidth: 1000, margin: "0 auto", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <a href="#top" style={{ fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.02em", display: "inline-flex", alignItems: "center", gap: 10 }}>
             <NLogo size={26} id="n-grad-nav" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo</span></span>
@@ -203,17 +387,54 @@ function Index() {
             <Link to="/careers" className="nav-link">Careers</Link>
           </div>
           <a href="#contact" onClick={(e) => handleNav(e, "contact")} className="btn btn-primary nav-cta">Get in Touch →</a>
+
+          {/* Hamburger toggle button visible on mobile */}
+          <button className="menu-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle Navigation Menu">
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </nav>
 
+      {/* Mobile Nav Overlay */}
+      <div className={`mobile-nav ${mobileOpen ? "is-open" : ""}`}>
+        {["Services", "Vision", "Goals"].map((l) => {
+          const id = l.toLowerCase();
+          return (
+            <a
+              key={l}
+              href={`#${id}`}
+              onClick={(e) => {
+                setMobileOpen(false);
+                handleNav(e, id);
+              }}
+              className={`mobile-nav-link ${active === id ? "is-active" : ""}`}
+            >
+              {l}
+            </a>
+          );
+        })}
+        <Link to="/careers" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Careers</Link>
+        <a
+          href="#contact"
+          onClick={(e) => {
+            setMobileOpen(false);
+            handleNav(e, "contact");
+          }}
+          className="btn btn-primary"
+          style={{ marginTop: 12 }}
+        >
+          Get in Touch →
+        </a>
+      </div>
+
       {/* HERO */}
-      <section id="top" style={{ position: "relative", padding: "140px 28px 80px", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="top" style={{ position: "relative", padding: "140px 28px 80px", maxWidth: 1000, margin: "0 auto" }}>
         <div className="radial-glow" />
         <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.6, maskImage: "radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%)" }} />
         <Particles />
         <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 40, alignItems: "center" }} className="hero-grid">
           <div className="enter-hero-text">
-            <span className="pill"><span className="pill-dot" />Nexyvo Technologies · Est. 2025</span>
+            <span className="pill"><span className="pill-dot" />Nexyvo Technologies · Est. 2026</span>
             <h1 className="hero-h" style={{ marginTop: 18 }}>
               Innovate Beyond.<br />
               Build <span className="serif-i">Intelligent.</span>
@@ -227,9 +448,9 @@ function Index() {
             </div>
             <div style={{ display: "flex", gap: 32, marginTop: 36 }}>
               {[
-                { n: "10+", l: "Services" },
-                { n: "4+", l: "Industries" },
-                { n: "2×", l: "Models" },
+                { n: "10+", l: "Core Services" },
+                { n: "AI", l: "Philosophy" },
+                { n: "2026", l: "Founded" },
               ].map((s) => (
                 <div key={s.l}>
                   <div style={{ fontSize: "1.5rem", fontWeight: 700, letterSpacing: "-0.03em" }}>{s.n}</div>
@@ -242,10 +463,10 @@ function Index() {
         </div>
       </section>
 
-      <div className="divider" style={{ maxWidth: 1200, margin: "0 auto" }} />
+      <div className="divider" style={{ maxWidth: 1000, margin: "0 auto" }} />
 
       {/* SERVICES */}
-      <section id="services" style={{ padding: "90px 28px", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="services" style={{ padding: "90px 28px", maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 50 }}>
           <span className="section-tag">What we build</span>
           <h2 className="sec-h" style={{ marginTop: 14 }}>
@@ -255,19 +476,55 @@ function Index() {
             From product design to AI infrastructure — a complete service layer for ambitious teams.
           </p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }} className="svc-grid">
-          {services.map((s) => (
-            <div key={s.t} className="card-base card-hover" style={{ padding: 22 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, display: "grid", placeItems: "center", background: `${s.c}22`, border: `1px solid ${s.c}44`, fontSize: ".95rem" }}>{s.i}</div>
-              <h3 style={{ fontSize: ".95rem", fontWeight: 600, marginTop: 14, letterSpacing: "-0.01em" }}>{s.t}</h3>
-              <p className="text-2" style={{ fontSize: ".78rem", lineHeight: 1.7, marginTop: 6 }}>{s.d}</p>
+        <div className="svc-grid-bento">
+          {services.map((s, index) => (
+            <div
+              key={s.t}
+              className={`service-card-bento ${s.wide ? "span-2" : "span-1"}`}
+              style={{
+                "--accent-color": s.c,
+                "--accent-glow": `${s.c}22`,
+                "--float-duration": `${s.dur}s`,
+                "--float-delay": `${s.delay}s`,
+                "--tilt-x": `${s.tiltX}deg`,
+                "--tilt-y": `${s.tiltY}deg`,
+                "--translate-z": `${s.z}px`,
+              } as React.CSSProperties}
+            >
+              {/* Noise overlay */}
+              <div className="card-noise" />
+              
+              {/* Light blob */}
+              <div className="card-light-blob" style={{ background: s.c }} />
+              
+              {/* Drifting particles */}
+              <div className="card-drift-dots">
+                <span className="drift-dot" style={{ left: "15%", animationDelay: "0s", animationDuration: "11s" }} />
+                <span className="drift-dot" style={{ left: "45%", animationDelay: "3s", animationDuration: "15s" }} />
+                <span className="drift-dot" style={{ left: "75%", animationDelay: "1.5s", animationDuration: "13s" }} />
+              </div>
+              
+              {/* Floating index number with counter animation */}
+              <div className="bento-card-num">
+                <ServiceNumber target={index + 1} />
+              </div>
+
+              {/* Icon container */}
+              <div className="bento-icon-box">
+                {s.icon}
+              </div>
+              
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+              
+              <span className="bento-card-arrow">→</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* VISION / MISSION */}
-      <section id="vision" style={{ padding: "80px 28px", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="vision" style={{ padding: "80px 28px", maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <span className="section-tag">Why we exist</span>
           <h2 className="sec-h" style={{ marginTop: 14 }}>Vision &amp; <span className="serif-i">Mission.</span></h2>
@@ -291,7 +548,7 @@ function Index() {
       </section>
 
       {/* GOALS */}
-      <section id="goals" style={{ padding: "80px 28px", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="goals" style={{ padding: "80px 28px", maxWidth: 1000, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <span className="section-tag">Where we&apos;re headed</span>
           <h2 className="sec-h" style={{ marginTop: 14 }}>Future <span className="serif-i">goals.</span></h2>
@@ -312,7 +569,7 @@ function Index() {
       {/* TAGLINE / CTA */}
       <section id="contact" style={{ padding: "120px 28px 100px", textAlign: "center", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(50% 60% at 50% 50%, rgba(124,111,255,0.18), transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative", maxWidth: 980, margin: "0 auto" }}>
+        <div style={{ position: "relative", maxWidth: 840, margin: "0 auto" }}>
           <span className="section-tag">Let&apos;s build</span>
           <h2 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 18 }}>
             Innovate <span className="serif-i">beyond</span>. Build <span className="serif-i">intelligent</span>.
@@ -328,12 +585,12 @@ function Index() {
 
       {/* FOOTER */}
       <footer style={{ borderTop: "1px solid var(--cb)", padding: "26px 28px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div style={{ fontWeight: 700, letterSpacing: "-0.02em", display: "inline-flex", alignItems: "center", gap: 10 }}>
             <NLogo size={22} id="n-grad-foot" />
             <span><span className="brand-w">Ne</span><span className="brand-x">x</span><span className="brand-w">yvo Technologies</span></span>
           </div>
-          <div style={{ fontSize: ".7rem", color: "var(--text2)" }}>© 2025 Nexyvo Technologies. All rights reserved.</div>
+          <div style={{ fontSize: ".7rem", color: "var(--text2)" }}>© 2026 Nexyvo Technologies. All rights reserved.</div>
         </div>
       </footer>
 
