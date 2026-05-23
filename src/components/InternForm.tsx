@@ -1,324 +1,395 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   Palette, Smartphone, Layers, MonitorSmartphone, Server,
   UploadCloud, FileText, X, Check, ArrowRight, ArrowLeft,
-  User, Mail, Phone, GraduationCap, Sparkles, Link2, Code2,
+  User, GraduationCap, Briefcase, FileCheck2, ClipboardCheck,
+  CheckCircle2, Pencil,
 } from "lucide-react";
 
-const ROLES = [
-  { Ic: Palette,           t: "UI / UX Design",        d: "Figma · design systems · prototyping",  hue: "270" },
-  { Ic: Smartphone,        t: "App Development (Flutter)", d: "Cross-platform mobile apps",        hue: "190" },
-  { Ic: Layers,            t: "Full Stack",            d: "End-to-end product engineering",        hue: "220" },
-  { Ic: MonitorSmartphone, t: "Frontend",              d: "React · TypeScript · modern UI",        hue: "300" },
-  { Ic: Server,            t: "Backend",               d: "APIs · databases · cloud",              hue: "160" },
+const POSITIONS = [
+  { Ic: Palette,           id: "UI/UX Design",            blurb: "Figma, design systems, prototyping" },
+  { Ic: Smartphone,        id: "App Development (Flutter)", blurb: "Cross-platform mobile apps" },
+  { Ic: Layers,            id: "Full Stack Development",  blurb: "End-to-end product engineering" },
+  { Ic: MonitorSmartphone, id: "Frontend Development",    blurb: "React, TypeScript, modern UI" },
+  { Ic: Server,            id: "Backend Development",     blurb: "APIs, databases, cloud infra" },
 ];
 
-const STEPS = ["Role", "Identity", "Education", "Craft"];
+const STEPS = [
+  { t: "Position",       d: "Role you're applying for",          Ic: Briefcase },
+  { t: "Personal Info",  d: "Contact details",                    Ic: User },
+  { t: "Education",      d: "Academic background",                Ic: GraduationCap },
+  { t: "Experience",     d: "Skills & portfolio",                 Ic: FileCheck2 },
+  { t: "Documents",      d: "Resume & consent",                   Ic: UploadCloud },
+  { t: "Review",         d: "Verify & submit",                    Ic: ClipboardCheck },
+];
+
 const ENDPOINT = "https://formsubmit.co/nexyvoofficial@gmail.com";
+const JOB_ID = "NXY-INT-2025";
 
 export function InternForm() {
   const [step, setStep] = useState(0);
-  const [dir, setDir] = useState<1 | -1>(1);
-  const [role, setRole] = useState("");
-  const [form, setForm] = useState({
-    name: "", email: "", phone: "",
-    college: "", year: "",
-    skills: "", portfolio: "", resume: "", why: "",
+  const [position, setPosition] = useState("");
+  const [f, setF] = useState({
+    firstName: "", lastName: "", email: "", phone: "", location: "",
+    college: "", degree: "", year: "", graduation: "",
+    skills: "", portfolio: "", github: "", linkedin: "",
+    experience: "", why: "",
+    resumeLink: "",
   });
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [consent, setConsent] = useState(false);
   const [drag, setDrag] = useState(false);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const upd = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const upd = (k: keyof typeof f, v: string) => setF((p) => ({ ...p, [k]: v }));
 
-  const s1Ok = !!role;
-  const s2Ok = form.name.trim().length > 1 &&
-               /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
-               form.phone.trim().length >= 7;
-  const s3Ok = form.college.trim().length > 1 && !!form.year;
-  const s4Ok = form.skills.trim().length > 1 && form.why.trim().length > 4;
+  const ok0 = !!position;
+  const ok1 = f.firstName.trim().length > 1 && f.lastName.trim().length > 0 &&
+              /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email) && f.phone.trim().length >= 7;
+  const ok2 = f.college.trim().length > 1 && f.degree.trim().length > 1 && !!f.year;
+  const ok3 = f.skills.trim().length > 1 && f.why.trim().length > 9;
+  const ok4 = (!!resumeFile || f.resumeLink.trim().length > 5) && consent;
 
-  const next = () => { setDir(1); setStep((s) => Math.min(3, s + 1)); };
-  const back = () => { setDir(-1); setStep((s) => Math.max(0, s - 1)); };
+  const stepOk = [ok0, ok1, ok2, ok3, ok4, true];
+
+  const next = () => setStep((s) => Math.min(STEPS.length - 1, s + 1));
+  const back = () => setStep((s) => Math.max(0, s - 1));
+  const goto = (i: number) => { if (i <= step || stepOk.slice(0, i).every(Boolean)) setStep(i); };
 
   const send = async () => {
     setSending(true); setErr("");
     try {
       const fd = new FormData();
-      fd.append("_subject", `Nexyvo Internship — ${role} — ${form.name}`);
-      fd.append("Role", role);
+      fd.append("_subject", `Nexyvo Application — ${position} — ${f.firstName} ${f.lastName}`);
+      fd.append("Job ID", JOB_ID);
+      fd.append("Position", position);
       fd.append("Stipend", "Performance based");
       fd.append("Duration", "3–4 months");
-      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      Object.entries(f).forEach(([k, v]) => fd.append(k, v));
       if (resumeFile) fd.append("Resume", resumeFile);
       const res = await fetch(ENDPOINT, { method: "POST", body: fd });
       if (!res.ok) throw new Error("net");
       setDone(true);
     } catch {
       const body =
-        `Role: ${role}\nStipend: Performance based\nDuration: 3-4 months\n\n` +
-        Object.entries(form).map(([k, v]) => `${k}: ${v}`).join("\n") +
+        `Job ID: ${JOB_ID}\nPosition: ${position}\nStipend: Performance based\nDuration: 3-4 months\n\n` +
+        Object.entries(f).map(([k, v]) => `${k}: ${v}`).join("\n") +
         (resumeFile ? `\n\nResume: ${resumeFile.name} (attach manually)` : "");
       window.location.href =
-        `mailto:nexyvoofficial@gmail.com?subject=${encodeURIComponent(`Nexyvo Internship — ${role} — ${form.name}`)}&body=${encodeURIComponent(body)}`;
-      setErr("Opening your email app as fallback…");
+        `mailto:nexyvoofficial@gmail.com?subject=${encodeURIComponent(`Nexyvo Application — ${position} — ${f.firstName} ${f.lastName}`)}&body=${encodeURIComponent(body)}`;
+      setErr("Couldn't reach the server. Opening your email app as a fallback…");
     } finally { setSending(false); }
   };
 
-  const onPickFile = (f: File | null) => {
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { setErr("File must be under 5MB"); return; }
-    setErr(""); setResumeFile(f);
+  const onPick = (file: File | null) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setErr("Resume must be under 5MB."); return; }
+    const ok = /\.(pdf|docx?|rtf)$/i.test(file.name);
+    if (!ok) { setErr("Please upload a PDF, DOC, or DOCX file."); return; }
+    setErr(""); setResumeFile(file);
   };
 
-  if (done) return <SuccessCard role={role} email={form.email} />;
+  if (done) return <Success position={position} email={f.email} name={`${f.firstName} ${f.lastName}`} />;
 
-  const canAdvance =
-    (step === 0 && s1Ok) || (step === 1 && s2Ok) ||
-    (step === 2 && s3Ok) || (step === 3 && s4Ok);
+  const progress = Math.round(((step) / (STEPS.length - 1)) * 100);
 
   return (
-    <div className="ix-shell">
-      {/* Orbital stepper */}
-      <aside className="ix-rail">
-        <div className="ix-rail-line">
-          <span className="ix-rail-fill" style={{ height: `${(step / 3) * 100}%` }} />
+    <div className="ap-card">
+      <header className="ap-card-head">
+        <div>
+          <div className="ap-card-title">Internship Application</div>
+          <div className="ap-card-sub">All fields are kept confidential and used only for hiring.</div>
         </div>
-        {STEPS.map((label, i) => (
-          <button
-            key={label}
-            type="button"
-            onClick={() => i < step && (setDir(-1), setStep(i))}
-            className={`ix-node ${i === step ? "is-active" : ""} ${i < step ? "is-done" : ""}`}
-            disabled={i > step}
-          >
-            <span className="ix-node-dot">
-              {i < step ? <Check size={12} strokeWidth={3} /> : <span>{i + 1}</span>}
-            </span>
-            <span className="ix-node-lbl">{label}</span>
-          </button>
-        ))}
-        <div className="ix-rail-meta">
-          <div className="ix-meta-row"><Sparkles size={12} /> Performance stipend</div>
-          <div className="ix-meta-row"><Code2 size={12} /> 3–4 months</div>
-        </div>
-      </aside>
+        <span className="ap-jobid">{JOB_ID}</span>
+      </header>
 
-      {/* Panel */}
-      <div className="ix-panel">
-        <div className={`ix-stage ix-dir-${dir > 0 ? "fwd" : "back"}`} key={step}>
-          {step === 0 && (
-            <StepShell eyebrow={`Step 01 / 04`} title="Pick your craft" subtitle="Where would you like to grow at Nexyvo?">
-              <div className="ix-roles">
-                {ROLES.map((r, idx) => {
-                  const sel = role === r.t;
-                  return (
+      <div className="ap-body">
+        <aside className="ap-side">
+          <div className="ap-side-h">Application Steps</div>
+          <nav className="ap-steps">
+            {STEPS.map((s, i) => (
+              <button
+                key={s.t}
+                type="button"
+                disabled={i > step && !stepOk.slice(0, i).every(Boolean)}
+                onClick={() => goto(i)}
+                className={`ap-step-btn ${i === step ? "is-active" : ""} ${i < step ? "is-done" : ""}`}
+              >
+                <span className="ap-step-num">
+                  {i < step ? <Check size={11} strokeWidth={3} /> : i + 1}
+                </span>
+                <span className="ap-step-meta">
+                  <span className="ap-step-t">{s.t}</span>
+                  <span className="ap-step-d">{s.d}</span>
+                </span>
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        <div className="ap-content" key={step}>
+          <div className="ap-stage">
+            {step === 0 && (
+              <>
+                <div className="ap-eyebrow">Step 1 of {STEPS.length}</div>
+                <h2 className="ap-h">Select a position</h2>
+                <p className="ap-sub">Choose the role you'd like to be considered for. You'll be matched with a mentor in that team.</p>
+                <div className="ap-positions">
+                  {POSITIONS.map((p) => (
                     <button
-                      key={r.t}
+                      key={p.id}
                       type="button"
-                      className={`ix-role ${sel ? "sel" : ""}`}
-                      style={{ ["--hue" as any]: r.hue, animationDelay: `${idx * 60}ms` }}
-                      onClick={() => setRole(r.t)}
+                      className={`ap-position ${position === p.id ? "sel" : ""}`}
+                      onClick={() => setPosition(p.id)}
                     >
-                      <span className="ix-role-glow" />
-                      <span className="ix-role-ic"><r.Ic size={20} strokeWidth={1.6} /></span>
-                      <span className="ix-role-text">
-                        <span className="ix-role-t">{r.t}</span>
-                        <span className="ix-role-d">{r.d}</span>
+                      <span className="ap-position-ic"><p.Ic size={18} strokeWidth={1.6} /></span>
+                      <span className="ap-position-text">
+                        <span className="ap-position-t">{p.id}</span>
+                        <span className="ap-position-d">{p.blurb}</span>
                       </span>
-                      <span className={`ix-role-check ${sel ? "on" : ""}`}>
-                        <Check size={12} strokeWidth={3} />
-                      </span>
+                      <span className="ap-radio" />
                     </button>
-                  );
-                })}
-              </div>
-            </StepShell>
-          )}
+                  ))}
+                </div>
+              </>
+            )}
 
-          {step === 1 && (
-            <StepShell eyebrow="Step 02 / 04" title="Who are you?" subtitle="A few details so we can reach you.">
-              <div className="ix-fields">
-                <NeoField icon={User} label="Full name" value={form.name} onChange={(v) => upd("name", v)} placeholder="e.g. Aarav Mehta" />
-                <NeoField icon={Mail} type="email" label="Email" value={form.email} onChange={(v) => upd("email", v)} placeholder="you@email.com" />
-                <NeoField icon={Phone} label="Phone" value={form.phone} onChange={(v) => upd("phone", v)} placeholder="+91 …" />
-              </div>
-            </StepShell>
-          )}
-
-          {step === 2 && (
-            <StepShell eyebrow="Step 03 / 04" title="Education" subtitle="Where you're studying — or just finished.">
-              <div className="ix-fields">
-                <NeoField icon={GraduationCap} label="College / University" value={form.college} onChange={(v) => upd("college", v)} placeholder="Your institution" />
-                <NeoSelect label="Year of study" value={form.year} onChange={(v) => upd("year", v)}
-                  options={["1st year","2nd year","3rd year","4th year","Final year","Recent graduate"]} />
-              </div>
-            </StepShell>
-          )}
-
-          {step === 3 && (
-            <StepShell eyebrow="Step 04 / 04" title="Show your craft" subtitle="Skills, links, and a line about you.">
-              <div className="ix-fields">
-                <NeoField icon={Code2} label="Key skills" value={form.skills} onChange={(v) => upd("skills", v)} placeholder="React, Flutter, Figma…" />
-                <NeoField icon={Link2} label="Portfolio / GitHub" value={form.portfolio} onChange={(v) => upd("portfolio", v)} placeholder="https://…" />
-                <NeoField icon={Link2} label="Resume link (optional)" value={form.resume} onChange={(v) => upd("resume", v)} placeholder="Drive / Notion URL" />
-
-                <div className="ix-field" style={{ gridColumn: "1 / -1" }}>
-                  <label className="ix-lbl">Upload resume</label>
-                  <div
-                    className={`ix-drop ${drag ? "drag" : ""} ${resumeFile ? "has" : ""}`}
-                    onClick={() => fileRef.current?.click()}
-                    onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-                    onDragLeave={() => setDrag(false)}
-                    onDrop={(e) => { e.preventDefault(); setDrag(false); onPickFile(e.dataTransfer.files?.[0] ?? null); }}
-                  >
-                    <span className="ix-drop-ring" />
-                    {resumeFile ? (
-                      <>
-                        <FileText className="ix-drop-ic" size={22} />
-                        <div className="ix-drop-t">{resumeFile.name}</div>
-                        <div className="ix-drop-s">{(resumeFile.size / 1024).toFixed(0)} KB · click to replace</div>
-                        <button type="button" className="ix-drop-x" onClick={(e) => { e.stopPropagation(); setResumeFile(null); }} aria-label="Remove">
-                          <X size={14} />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <UploadCloud className="ix-drop-ic" size={26} />
-                        <div className="ix-drop-t">Drop your resume here</div>
-                        <div className="ix-drop-s">or click to browse · PDF, DOC · max 5MB</div>
-                      </>
-                    )}
-                    <input ref={fileRef} type="file" hidden accept=".pdf,.doc,.docx,application/pdf"
-                      onChange={(e) => onPickFile(e.target.files?.[0] ?? null)} />
+            {step === 1 && (
+              <>
+                <div className="ap-eyebrow">Step 2 of {STEPS.length}</div>
+                <h2 className="ap-h">Personal information</h2>
+                <p className="ap-sub">How should we reach you?</p>
+                <div className="ap-grid">
+                  <Field label="First name" req value={f.firstName} onChange={(v) => upd("firstName", v)} placeholder="Aarav" />
+                  <Field label="Last name"  req value={f.lastName}  onChange={(v) => upd("lastName", v)}  placeholder="Mehta" />
+                  <Field label="Email"      req type="email" value={f.email} onChange={(v) => upd("email", v)} placeholder="you@email.com" />
+                  <Field label="Phone"      req value={f.phone} onChange={(v) => upd("phone", v)} placeholder="+91 98xxxxxxxx" />
+                  <div className="ap-field full">
+                    <label className="ap-lbl">Current location <span className="ap-hint">(optional)</span></label>
+                    <input className="ap-input" value={f.location} onChange={(e) => upd("location", e.target.value)} placeholder="City, Country" />
                   </div>
                 </div>
+              </>
+            )}
 
-                <div className="ix-field" style={{ gridColumn: "1 / -1" }}>
-                  <label className="ix-lbl">Why Nexyvo?</label>
-                  <textarea className="ix-area" rows={3} value={form.why}
-                    onChange={(e) => upd("why", e.target.value)}
-                    placeholder="A line or two about you — what drives you to build?" />
+            {step === 2 && (
+              <>
+                <div className="ap-eyebrow">Step 3 of {STEPS.length}</div>
+                <h2 className="ap-h">Education</h2>
+                <p className="ap-sub">Tell us where you're studying, or just finished.</p>
+                <div className="ap-grid">
+                  <Field full label="College / University" req value={f.college} onChange={(v) => upd("college", v)} placeholder="e.g. SRM Institute of Science and Technology" />
+                  <Field label="Degree / Major" req value={f.degree} onChange={(v) => upd("degree", v)} placeholder="B.Tech, CSE" />
+                  <div className="ap-field">
+                    <label className="ap-lbl">Year of study <span className="req">*</span></label>
+                    <select className="ap-native-select" value={f.year} onChange={(e) => upd("year", e.target.value)}>
+                      <option value="">Select year</option>
+                      <option>1st Year</option>
+                      <option>2nd Year</option>
+                      <option>3rd Year</option>
+                      <option>4th Year</option>
+                      <option>Final Year</option>
+                      <option>Recent Graduate</option>
+                    </select>
+                  </div>
+                  <div className="ap-field full">
+                    <label className="ap-lbl">Expected graduation <span className="ap-hint">(optional)</span></label>
+                    <input className="ap-input" value={f.graduation} onChange={(e) => upd("graduation", e.target.value)} placeholder="e.g. June 2026" />
+                  </div>
                 </div>
-              </div>
-            </StepShell>
-          )}
-        </div>
+              </>
+            )}
 
-        {err && <div className="ix-err">{err}</div>}
+            {step === 3 && (
+              <>
+                <div className="ap-eyebrow">Step 4 of {STEPS.length}</div>
+                <h2 className="ap-h">Experience & portfolio</h2>
+                <p className="ap-sub">Share what you've built and the tools you're strongest in.</p>
+                <div className="ap-grid">
+                  <div className="ap-field full">
+                    <label className="ap-lbl">Key skills <span className="req">*</span></label>
+                    <input className="ap-input" value={f.skills} onChange={(e) => upd("skills", e.target.value)} placeholder="e.g. React, TypeScript, Figma, Flutter, Node.js" />
+                  </div>
+                  <Field label="Portfolio URL" value={f.portfolio} onChange={(v) => upd("portfolio", v)} placeholder="https://yourwork.com" />
+                  <Field label="GitHub"        value={f.github}    onChange={(v) => upd("github", v)}    placeholder="https://github.com/username" />
+                  <Field full label="LinkedIn" value={f.linkedin} onChange={(v) => upd("linkedin", v)} placeholder="https://linkedin.com/in/username" />
+                  <div className="ap-field full">
+                    <label className="ap-lbl">Relevant experience <span className="ap-hint">(internships, freelance, projects — optional)</span></label>
+                    <textarea className="ap-textarea" value={f.experience} onChange={(e) => upd("experience", e.target.value)} placeholder="Briefly describe 1–2 projects or internships." />
+                  </div>
+                  <div className="ap-field full">
+                    <label className="ap-lbl">Why Nexyvo? <span className="req">*</span></label>
+                    <textarea className="ap-textarea" value={f.why} onChange={(e) => upd("why", e.target.value)} placeholder="A few lines on what excites you about this role and Nexyvo." />
+                  </div>
+                </div>
+              </>
+            )}
 
-        <div className="ix-actions">
-          <button type="button" className="ix-btn ix-ghost" onClick={back} disabled={step === 0}>
-            <ArrowLeft size={14} /> Back
-          </button>
-          <div className="ix-progress-text">
-            <span style={{ color: "var(--text)" }}>{step + 1}</span>
-            <span style={{ color: "var(--text3)" }}> / 04</span>
+            {step === 4 && (
+              <>
+                <div className="ap-eyebrow">Step 5 of {STEPS.length}</div>
+                <h2 className="ap-h">Documents & consent</h2>
+                <p className="ap-sub">Upload your resume (PDF, DOC, DOCX · max 5MB) or share a link.</p>
+                <div className="ap-grid one">
+                  <div className="ap-field">
+                    <label className="ap-lbl">Resume <span className="req">*</span></label>
+                    <div
+                      className={`ap-drop ${drag ? "drag" : ""} ${resumeFile ? "has" : ""}`}
+                      onClick={() => fileRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+                      onDragLeave={() => setDrag(false)}
+                      onDrop={(e) => { e.preventDefault(); setDrag(false); onPick(e.dataTransfer.files?.[0] ?? null); }}
+                    >
+                      {resumeFile ? (
+                        <>
+                          <FileText className="ap-drop-ic" size={22} />
+                          <div className="ap-drop-t">{resumeFile.name}</div>
+                          <div className="ap-drop-s">{(resumeFile.size / 1024).toFixed(0)} KB · click to replace</div>
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="ap-drop-ic" size={24} />
+                          <div className="ap-drop-t">Drag & drop your resume</div>
+                          <div className="ap-drop-s">or click to browse — PDF, DOC, DOCX</div>
+                        </>
+                      )}
+                      <input ref={fileRef} type="file" hidden accept=".pdf,.doc,.docx,application/pdf"
+                        onChange={(e) => onPick(e.target.files?.[0] ?? null)} />
+                    </div>
+                    {resumeFile && (
+                      <span className="ap-file-tag">
+                        <FileText size={12} /> {resumeFile.name}
+                        <button type="button" onClick={() => setResumeFile(null)} aria-label="Remove"><X size={12} /></button>
+                      </span>
+                    )}
+                  </div>
+                  <div className="ap-field">
+                    <label className="ap-lbl">…or paste a resume link <span className="ap-hint">(Drive, Notion, Dropbox)</span></label>
+                    <input className="ap-input" value={f.resumeLink} onChange={(e) => upd("resumeLink", e.target.value)} placeholder="https://…" />
+                  </div>
+                  <label className="ap-check">
+                    <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+                    <span>
+                      <span className="ap-check-t">I consent to Nexyvo Technologies processing my application.</span>
+                      <span className="ap-check-d">Your information is used only for evaluating this application and contacting you about the role.</span>
+                    </span>
+                  </label>
+                </div>
+              </>
+            )}
+
+            {step === 5 && (
+              <>
+                <div className="ap-eyebrow">Final step</div>
+                <h2 className="ap-h">Review your application</h2>
+                <p className="ap-sub">Take a moment to confirm everything looks right before submitting.</p>
+                <div className="ap-review">
+                  <ReviewSec t="Position" Ic={Briefcase} onEdit={() => setStep(0)}>
+                    <Row k="Role" v={position} full />
+                    <Row k="Duration" v="3–4 months" />
+                    <Row k="Stipend" v="Performance based" />
+                  </ReviewSec>
+                  <ReviewSec t="Personal Info" Ic={User} onEdit={() => setStep(1)}>
+                    <Row k="Name" v={`${f.firstName} ${f.lastName}`} />
+                    <Row k="Email" v={f.email} />
+                    <Row k="Phone" v={f.phone} />
+                    <Row k="Location" v={f.location || "—"} />
+                  </ReviewSec>
+                  <ReviewSec t="Education" Ic={GraduationCap} onEdit={() => setStep(2)}>
+                    <Row k="Institution" v={f.college} full />
+                    <Row k="Degree" v={f.degree} />
+                    <Row k="Year" v={f.year} />
+                    <Row k="Graduation" v={f.graduation || "—"} />
+                  </ReviewSec>
+                  <ReviewSec t="Experience" Ic={FileCheck2} onEdit={() => setStep(3)}>
+                    <Row k="Skills" v={f.skills} full />
+                    <Row k="Portfolio" v={f.portfolio || "—"} />
+                    <Row k="GitHub" v={f.github || "—"} />
+                    <Row k="LinkedIn" v={f.linkedin || "—"} full />
+                    <Row k="Why Nexyvo" v={f.why} full />
+                  </ReviewSec>
+                  <ReviewSec t="Documents" Ic={UploadCloud} onEdit={() => setStep(4)}>
+                    <Row k="Resume" v={resumeFile?.name || f.resumeLink || "—"} full />
+                    <Row k="Consent" v={consent ? "Provided" : "—"} />
+                  </ReviewSec>
+                </div>
+              </>
+            )}
           </div>
-          {step < 3 ? (
-            <button type="button" className="ix-btn ix-primary" onClick={next} disabled={!canAdvance}>
-              Continue <ArrowRight size={14} />
-            </button>
-          ) : (
-            <button type="button" className="ix-btn ix-submit" onClick={send} disabled={!s4Ok || sending}>
-              {sending ? "Sending…" : <>Submit Application <ArrowRight size={14} /></>}
-              <span className="ix-submit-sheen" />
-            </button>
-          )}
+
+          {err && <div className="ap-err">{err}</div>}
         </div>
       </div>
-    </div>
-  );
-}
 
-function StepShell({ eyebrow, title, subtitle, children }: { eyebrow: string; title: string; subtitle: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="ix-eyebrow">{eyebrow}</div>
-      <h3 className="ix-title">{title.split("").map((c, i) => (
-        <span key={i} className="ix-char" style={{ animationDelay: `${i * 22}ms` }}>{c === " " ? "\u00A0" : c}</span>
-      ))}</h3>
-      <p className="ix-sub">{subtitle}</p>
-      <div style={{ marginTop: 24 }}>{children}</div>
-    </div>
-  );
-}
-
-function NeoField({ icon: Icon, label, value, onChange, placeholder, type = "text" }: {
-  icon: React.ComponentType<{ size?: number }>; label: string; value: string;
-  onChange: (v: string) => void; placeholder?: string; type?: string;
-}) {
-  const [focus, setFocus] = useState(false);
-  return (
-    <div className={`ix-field ${focus ? "focus" : ""} ${value ? "filled" : ""}`}>
-      <label className="ix-lbl"><Icon size={11} /> {label}</label>
-      <div className="ix-input-wrap">
-        <input
-          className="ix-input"
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          onFocus={() => setFocus(true)}
-          onBlur={() => setFocus(false)}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        <span className="ix-underline" />
-      </div>
-    </div>
-  );
-}
-
-function NeoSelect({ label, value, onChange, options }: {
-  label: string; value: string; onChange: (v: string) => void; options: string[];
-}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, []);
-  return (
-    <div className={`ix-field ${value ? "filled" : ""}`} ref={ref}>
-      <label className="ix-lbl"><GraduationCap size={11} /> {label}</label>
-      <button type="button" className={`ix-select ${open ? "open" : ""}`} onClick={() => setOpen((o) => !o)}>
-        <span className={value ? "" : "ph"}>{value || "Select…"}</span>
-        <svg width="10" height="6" viewBox="0 0 10 6" className="ix-sel-arrow"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-      </button>
-      {open && (
-        <div className="ix-options">
-          {options.map((o, i) => (
-            <button
-              key={o}
-              type="button"
-              className={`ix-opt ${value === o ? "sel" : ""}`}
-              style={{ animationDelay: `${i * 25}ms` }}
-              onClick={() => { onChange(o); setOpen(false); }}
-            >
-              <span>{o}</span>
-              {value === o && <Check size={12} strokeWidth={3} />}
-            </button>
-          ))}
+      <footer className="ap-foot">
+        <button type="button" className="ap-btn ghost" onClick={back} disabled={step === 0}>
+          <ArrowLeft size={14} /> Back
+        </button>
+        <div className="ap-foot-prog">
+          <span>Step {step + 1} of {STEPS.length}</span>
+          <span className="ap-foot-bar"><span style={{ width: `${progress}%` }} /></span>
         </div>
-      )}
+        {step < STEPS.length - 1 ? (
+          <button type="button" className="ap-btn primary" onClick={next} disabled={!stepOk[step]}>
+            Continue <ArrowRight size={14} />
+          </button>
+        ) : (
+          <button type="button" className="ap-btn submit" onClick={send} disabled={sending}>
+            {sending ? "Submitting…" : <>Submit application <ArrowRight size={14} /></>}
+          </button>
+        )}
+      </footer>
     </div>
   );
 }
 
-function SuccessCard({ role, email }: { role: string; email: string }) {
+function Field({ label, value, onChange, placeholder, type = "text", req = false, full = false }: {
+  label: string; value: string; onChange: (v: string) => void;
+  placeholder?: string; type?: string; req?: boolean; full?: boolean;
+}) {
   return (
-    <div className="ix-success">
-      <div className="ix-success-orb">
-        <Check size={28} strokeWidth={3} />
-        <span className="ring1" /><span className="ring2" /><span className="ring3" />
+    <div className={`ap-field ${full ? "full" : ""}`}>
+      <label className="ap-lbl">{label} {req && <span className="req">*</span>}</label>
+      <input className="ap-input" type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+    </div>
+  );
+}
+
+function ReviewSec({ t, Ic, onEdit, children }: { t: string; Ic: React.ComponentType<{ size?: number }>; onEdit: () => void; children: React.ReactNode }) {
+  return (
+    <section className="ap-review-sec">
+      <div className="ap-review-h">
+        <span className="ap-review-t"><Ic size={14} /> {t}</span>
+        <button type="button" className="ap-review-edit" onClick={onEdit}><Pencil size={11} /> Edit</button>
       </div>
-      <h3 className="ix-success-h">Application received</h3>
-      <p className="ix-success-p">
-        We'll review your profile for <b style={{ color: "var(--acc3)" }}>{role}</b> and reach out at <b style={{ color: "var(--acc3)" }}>{email}</b>.
-      </p>
+      <div className="ap-review-list">{children}</div>
+    </section>
+  );
+}
+
+function Row({ k, v, full = false }: { k: string; v: string; full?: boolean }) {
+  return (
+    <div className={`ap-review-row ${full ? "full" : ""}`}>
+      <span className="ap-review-k">{k}</span>
+      <span className="ap-review-v">{v || "—"}</span>
+    </div>
+  );
+}
+
+function Success({ position, email, name }: { position: string; email: string; name: string }) {
+  return (
+    <div className="ap-card">
+      <div className="ap-success">
+        <div className="ap-success-ic"><CheckCircle2 size={32} strokeWidth={1.8} /></div>
+        <h2 className="ap-success-h">Application submitted</h2>
+        <p className="ap-success-p">
+          Thanks, <b style={{ color: "var(--text)" }}>{name.trim() || "candidate"}</b>. We've received your application for <b style={{ color: "var(--text)" }}>{position}</b>. Our team will review it and reach out at <b style={{ color: "var(--text)" }}>{email}</b> within 5–7 business days.
+        </p>
+        <div className="ap-success-meta">Reference: <b>{JOB_ID}</b></div>
+      </div>
     </div>
   );
 }
