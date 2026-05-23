@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Palette, Smartphone, Layers, MonitorSmartphone, Server,
   UploadCloud, FileText, X, Check, ArrowRight, ArrowLeft,
@@ -26,9 +26,25 @@ const STEPS = [
 const ENDPOINT = "https://formsubmit.co/nexyvoofficial@gmail.com";
 const JOB_ID = "NXY-INT-2025";
 
-export function InternForm() {
+export function InternForm({ 
+  selectedPosition, 
+  onPositionSelect,
+  onCancel
+}: { 
+  selectedPosition?: string; 
+  onPositionSelect?: (pos: string) => void; 
+  onCancel?: () => void;
+} = {}) {
   const [step, setStep] = useState(0);
-  const [position, setPosition] = useState("");
+  const [localPos, setLocalPos] = useState("");
+  const position = selectedPosition !== undefined ? selectedPosition : localPos;
+  const setPosition = onPositionSelect || setLocalPos;
+
+  useEffect(() => {
+    if (position) {
+      setStep(0);
+    }
+  }, [position]);
   const [f, setF] = useState({
     firstName: "", lastName: "", email: "", phone: "", location: "",
     college: "", degree: "", year: "", graduation: "",
@@ -190,8 +206,7 @@ export function InternForm() {
                       <option>1st Year</option>
                       <option>2nd Year</option>
                       <option>3rd Year</option>
-                      <option>4th Year</option>
-                      <option>Final Year</option>
+                      <option>4th Year / Final Year</option>
                       <option>Recent Graduate</option>
                     </select>
                   </div>
@@ -325,9 +340,15 @@ export function InternForm() {
       </div>
 
       <footer className="ap-foot">
-        <button type="button" className="ap-btn ghost" onClick={back} disabled={step === 0}>
-          <ArrowLeft size={14} /> Back
-        </button>
+        {step === 0 && onCancel ? (
+          <button type="button" className="ap-btn ghost" onClick={onCancel}>
+            <ArrowLeft size={14} /> Back to roles
+          </button>
+        ) : (
+          <button type="button" className="ap-btn ghost" onClick={back} disabled={step === 0}>
+            <ArrowLeft size={14} /> Back
+          </button>
+        )}
         <div className="ap-foot-prog">
           <span>Step {step + 1} of {STEPS.length}</span>
           <span className="ap-foot-bar"><span style={{ width: `${progress}%` }} /></span>
